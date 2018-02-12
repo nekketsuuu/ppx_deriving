@@ -1,30 +1,34 @@
 language: c
 sudo: false
+services:
+  - docker
+
 matrix:
   include:
-    - os: linux
-      services:
-        - docker
-      install: wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/master/.travis-docker.sh
-      script: bash -ex ./.travis-docker.sh
-      env:
-        global:
-          - PACKAGE="ppx_deriving"
-  	  - TESTS="true"
-        matrix:
-	  - DISTRO="alpine" OCAML_VERSION="4.06.0"
-	  - DISTRO="alpine" OCAML_VERSION="4.05.0"
-	  - DISTRO="alpine" OCAML_VERSION="4.04.2"
-	  - DISTRO="alpine" OCAML_VERSION="4.04.1"
-	  - DISTRO="alpine" OCAML_VERSION="4.04.0"
-	  - DISTRO="debian-stable" OCAML_VERSION="4.03.0"
-	  - DISTRO="ubuntu-16.04" OCAML_VERSION="4.02.3"
-    - os: osx
-      install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-opam.sh
-      script: bash -ex ./.travis-opam.sh
-      env:
-        global:
-          - PACKAGE="ppx_deriving"
-          - TESTS="true"
-        matrix:
-          - OCAML_VERSION="4.05.0"
+  - os: linux
+    env: DISTRO="alpine" OCAML_VERSION="4.06.0"
+  - os: linux
+    env: DISTRO="alpine" OCAML_VERSION="4.05.0"
+  - os: linux
+    env: DISTRO="alpine" OCAML_VERSION="4.04.2"
+  - os: linux
+    env: DISTRO="alpine" OCAML_VERSION="4.04.1"
+  - os: linux
+    env: DISTRO="alpine" OCAML_VERSION="4.04.0"
+  - os: linux
+    env: DISTRO="debian-stable" OCAML_VERSION="4.03.0"
+  - os: linux
+    env: DISTRO="ubuntu-16.04" OCAML_VERSION="4.02.3"
+  - os: osx
+    env: OCAML_VERSION="4.05.0"
+
+install:
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]] ; then wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/master/.travis-docker.sh ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx"   ]] ; then wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-opam.sh ; fi
+script:
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]] ; then bash -ex ./.travis-docker.sh ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx"   ]] ; then bash -ex ./.travis-opam.sh ; fi
+env:
+  global:
+  - PACKAGE="ppx_deriving"
+  - TESTS="true"
