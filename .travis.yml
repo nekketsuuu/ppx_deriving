@@ -32,3 +32,6 @@ env:
   global:
   - PACKAGE="ppx_deriving"
   - TESTS="true"
+cache:
+  directories:
+  - $HOME/.opam/
